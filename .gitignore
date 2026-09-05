@@ -1,0 +1,16 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+.env
+
+# Database
+*.db
+*.sqlite3
+
+# Data (not pushing yet)
+data/
+
+# OS/editor
+.vscode/
+.DS_Store
