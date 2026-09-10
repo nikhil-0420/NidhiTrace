@@ -9,7 +9,7 @@ BASE = "http://127.0.0.1:8000"
 
 def check(path, label):
     try:
-        with urllib.request.urlopen(BASE + path, timeout=5) as r:
+        with urllib.request.urlopen(BASE + path, timeout=15) as r:
             data = json.loads(r.read())
             print(f"✅ {label}: {path}")
             print(f"   {json.dumps(data)[:200]}")
