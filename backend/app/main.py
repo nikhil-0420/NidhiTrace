@@ -10,7 +10,7 @@ app = FastAPI(title="NidhiTrace API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # tighten before real deployment
+    allow_origins=["https://mplad-insight.vercel.app", "http://localhost:3000"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
