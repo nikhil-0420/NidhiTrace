@@ -1,298 +1,229 @@
-> Dashboard integrity cleanup: see [source definitions, regenerated counts and limitations](docs/dashboard-integrity.md). The snapshot has 23,329 rule-only flags and 23,907 flags including Isolation Forest; DQ is separate.
+# 🔎 NIDHI TRACE
 
-# NIDHI TRACE — MPLAD-INSIGHT
+### Explainable Anomaly Detection & Audit Triage for India's MPLADS Development Works
 
-<div align="center">
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-black?style=for-the-badge&logo=vercel)](https://nidhi-trace.vercel.app/)
+[![Repo](https://img.shields.io/badge/Repo-GitHub-181717?style=for-the-badge&logo=github)](https://github.com/nikhil-0420/NidhiTrace)
+[![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
 
-**National Intelligence for Developmental Harnessing & Irregularity Tracking**  
-*Algorithmic Audit & Multi-Signal Triage Platform for Member of Parliament Local Area Development Scheme (MPLADS)*
+[**Live Demo**](https://nidhi-trace.vercel.app/) · [**Repository**](https://github.com/nikhil-0420/NidhiTrace) · [**Backend Service**](https://nidhitrace-api.onrender.com)
 
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
-[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat&logo=python&logoColor=white)](https://python.org)
-[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.4+-F7931E?style=flat&logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
-[![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.4+-06B6D4?style=flat&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![Vercel](https://img.shields.io/badge/Live_Demo-Vercel-black?style=flat&logo=vercel&logoColor=white)](https://nidhi-trace.vercel.app/)
-[![Render](https://img.shields.io/badge/Backend-Render-46E3B7?style=flat&logo=render&logoColor=white)](https://nidhitrace-api.onrender.com)
-
-</div>
-
-<div align="center">
-
-### 🌐 Live Platform: [https://nidhi-trace.vercel.app/](https://nidhi-trace.vercel.app/)
-
-</div>
+> **Anomalies are leads for human review, not proof of fraud.** Dataset figures below describe a documented project snapshot; they are not live government totals or independently validated detection-accuracy results.
 
 ---
 
-## 📌 Executive Summary & Purpose
+## 📌 Overview
 
-The **Member of Parliament Local Area Development Scheme (MPLADS)** entitles each Member of Parliament (MP) to recommend development works up to **₹5 Crore per annum** for community asset creation across India. With hundreds of thousands of sanctioned projects spanning 785 district authorities, statutory audit bodies (MoSPI, CAG, State Finance Departments) face acute challenges:
+Public development records contain valuable signals about delayed approvals, unusual allocations, and inconsistent reporting. Finding those signals across thousands of works requires more than a dashboard of totals: reviewers need to see **which records deserve attention, why they were flagged, and what evidence supports further investigation**.
 
-1. **Information Asymmetry & Scale**: Auditing >190,000 project dockets manually is administratively unfeasible.
-2. **Timeline Stagnation**: Administrative delays from MP recommendation to formal district sanction frequently stretch into years without detection.
-3. **Econometric Variance**: Wide cost discrepancies across implementing agencies and districts often mask inflated contractor estimates or split-tenders.
-4. **Pitfalls of "Blended Severity Scoring"**: Generic single-score heuristics (e.g. weighted arbitrary scores from 0-100) fail in practice—weighting attempts inevitably suppress subtle delays or over-amplify benign high-value infrastructure.
+NIDHI TRACE is an audit-support platform for the **Member of Parliament Local Area Development Scheme (MPLADS)**. It combines robust statistical rules, unsupervised anomaly detection, and a separate data-quality assessment to organize records for human review.
 
-**NIDHI TRACE** solves this by establishing a **statistically validated, multi-signal audit pipeline**. Instead of opaque blended scores, the platform segments the review workload into **five independent, non-interfering triage lists** grounded in robust statistical methods ($\text{Robust } z \ge 3.5$), empowering vigilance officers and financial auditors to prioritize manual scrutiny with total transparency.
+- **Robust statistical checks** surface unusual recommendation-to-sanction delays and allocation amounts relative to peer groups.
+- **Spending-pattern analysis** identifies deviations from historical category baselines, with a guardrail for sparse histories.
+- **Isolation Forest** adds a multivariate view of atypical works.
+- **Case dossiers and APIs** expose individual signals and explanations instead of hiding them behind one blended risk score.
+- **An integrated frontend** provides triage, exploration, analytics, mapping, and an audit assistant.
 
----
-
-## 📊 Core Platform Figures (Validated Dataset Seed)
-
-The system operates over a consolidated, empirical seed of MPLADS works derived from official administrative filings:
-
-| Dimension | Metric / Figure | Context & Notes |
-|---|---|---|
-| **Total Registered Works** | **198,116** | Consolidated administrative records across 785 district nodes |
-| **Analyzed Works** | **171,890** (86.8%) | Records processed through multi-signal econometric pipeline |
-| **Review Queue (Flagged)** | **23,329** (13.6%) | Works triggering at least one independent statistical triage list |
-| **Critical / High Severity Outliers** | **1,137** (4.9% of flagged) | Breaching robust statistical bounds ($\text{Robust } z \ge 3.5$) |
-| **Total Analyzed Corpus** | **₹8,501.1 Cr** | Cumulative value of analyzed infrastructure allocations |
-| **Flagged Review Exposure** | **₹1,661.7 Cr** (19.6%) | Total rupee value associated with flagged works |
-| **High-Severity Exposure** | **₹262.3 Cr** | Capital allocated to severe cost/timeline outliers |
-| **Data Quality Exposure** | **₹494.2 Cr** | Capital tied to reporting errors, stale records, or misclassifications |
+**My role:** Backend development — **Nikhil** ([nikhil-0420](https://github.com/nikhil-0420)). The frontend was developed by a teammate; the live demo brings both parts together.
 
 ---
 
-## 🔬 Audit Methodology: Five Independent Triage Lists
+## 🖥️ App Preview
 
-Rather than a single synthetic score, NIDHI TRACE applies **five decoupled statistical and algorithmic triage lists**:
+Explore the [live platform](https://nidhi-trace.vercel.app/).
+
+| Workspace | What it supports |
+| --- | --- |
+| **Executive Overview** | Dataset coverage, review counts, severity distribution, and financial exposure |
+| **Triage Workbench** | Filtering flagged works by severity, category, agency, and state |
+| **Case Dossier** | Work-level details, individual flags, statistical explanations, and reviewer notes |
+| **Data Explorer** | Record search, sorting, and CSV export |
+| **Deep Dive Analytics** | Allocation variation, processing delays, and agency concentration |
+| **Geographic Map** | Spatial exploration of works and anomaly patterns |
+| **NIDHI Assistant** | Questions about dataset summaries, flags, and individual works |
+
+---
+
+## ✨ Features
+
+| Feature | Description |
+| --- | --- |
+| 📊 **Peer-Based Statistical Checks** | Median and median absolute deviation (MAD) help identify unusual amounts and delays relative to relevant cohorts |
+| 🧠 **Unsupervised Anomaly Detection** | Isolation Forest surfaces unusual combinations of project attributes |
+| 🧭 **Independent Review Signals** | Delay, amount, spending drift, and model-based flags remain individually inspectable |
+| 🧹 **Separate Data-Quality Assessment** | Reporting issues are distinguished from analytical anomaly flags |
+| 🛡️ **Sparse-History Guardrail** | Spending-drift evaluation is suppressed when an MP has fewer than five historical works |
+| 📂 **Explainable Case Dossiers** | A reviewer can inspect work details, applicable flags, and statistical context |
+| 🔌 **FastAPI Backend** | Summary, exposure, dossier, and assistant endpoints support the integrated application |
+| 👤 **Human Review** | Statistical findings guide investigation without automatically declaring wrongdoing |
+
+---
+
+## 🏗️ Tech Stack
+
+**Backend & Analysis**
+
+- Python · FastAPI
+- scikit-learn · Isolation Forest
+- Robust statistics: median, MAD, and robust z-scores
+- SQLite / Parquet dataset storage, as described in the project documentation
+
+**Frontend — Teammate Contribution**
+
+- HTML · JavaScript · Tailwind CSS
+- Dashboard, triage, dossier, analytics, and geographic views
+
+**Deployment**
+
+- Vercel — frontend demo
+- Render — backend service
+
+---
+
+## 📐 Architecture
 
 ```mermaid
 flowchart TD
-    Raw[198,116 MPLADS Records] --> Filter[Pipeline Data Preprocessing & Validation]
-    Filter --> Analyzed[171,890 Analyzed Works]
-    
-    Analyzed --> T1[Triage List 1: Timeline Latency<br/>Gap Days Robust z ≥ 3.5]
-    Analyzed --> T2[Triage List 2: Amount Outlier<br/>Constituency Cost Robust z ≥ 3.5]
-    Analyzed --> T3[Triage List 3: MP Spending Drift<br/>Historical Category Baseline MAD]
-    Analyzed --> T4[Triage List 4: Unsupervised Outlier<br/>Isolation Forest Multivariate Anomaly]
-    Analyzed --> T5[Triage List 5: Data Quality<br/>Implausible Amounts / Miscategorized / Stale]
-    
-    T1 --> Queue[Review Queue: 23,907 Flagged Works]
-    T2 --> Queue
-    T3 --> Queue
-    T4 --> Queue
-    T5 --> Queue
-    
-    Queue --> Dossier[Forensic Case Dossier & Human Auditor Review]
+    A["MPLADS records"] --> B["Preprocessing and validation"]
+    B --> C["Statistical rules"]
+    B --> D["Isolation Forest"]
+    B --> E["Data-quality checks"]
+    C --> F["Analytical review flags"]
+    D --> F
+    F --> G["FastAPI summaries and dossiers"]
+    E --> G
+    G --> H["Dashboard and human review"]
 ```
 
-### 1. Recommendation-to-Sanction Latency (`flag_delay`)
-- **Metric**: Elapsed calendar days (`gap_days`) between MP recommendation and district administrative sanction.
-- **Formulation**:
-  $$\text{Robust } z = \frac{\text{Delay} - \text{Median}(\text{district})}{\text{MAD}(\text{district}) \times 1.4826}$$
-- **Threshold**: Triggered when $\text{Robust } z \ge 3.5$ or `gap_days` > 180 days relative to median district processing latency.
-
-### 2. Sanction Amount Outlier (`flag_amount`)
-- **Metric**: Sanctioned allocation amount evaluated against category distribution within the specific constituency and state.
-- **Formulation**: Robust $z$-score based on median and median absolute deviation (MAD) within `(constituency, work_category)` cohorts.
-- **Threshold**: Triggered when $\text{Robust } z \ge 3.5$, flagging unusually expensive projects relative to peer works in the same category.
-
-### 3. MP Spending Pattern Drift (`flag_mp_drift`)
-- **Metric**: Evaluates whether an MP is channeling funds into a specific work category at rates that diverge drastically from their established historical expenditure baselines.
-- **Sparse Data Guardrail**:
-  > **Important**: If an MP has fewer than 5 historical works in the dataset (`mp_baseline_eligible == false`), drift evaluation is **explicitly suppressed** and marked as *"Insufficient historical baseline data (< 5 works)"* to prevent false alarms on sparse data.
-
-### 4. Unsupervised Multivariate Outliers (`flag_isolation_forest`)
-- **Metric**: High-dimensional anomaly detection using Scikit-Learn's `IsolationForest`.
-- **Feature Space**: Combines normalized sanction amounts, delay gaps, implementing agency concentration ratios, and regional density indicators.
-- **Role**: Identifies atypical project configurations that individual one-dimensional filters miss.
-
-### 5. Data Quality & Administrative Inconsistency (`dq_*`)
-- **Metric**: Validates reporting integrity across three core integrity rules:
-  - `dq_implausible_amount`: Anomalous entries such as negative amounts, sub-₹1,000 community works, or entries exceeding statutory constituency caps.
-  - `dq_stale_status`: Works remaining in preliminary states for multiple fiscal cycles without progress reporting.
-  - `dq_possible_miscategorization`: Semantic mismatches between text descriptions and designated category codes.
+Data-quality findings remain separately reported. Counts across overlapping analytical signals must be deduplicated at the work level.
 
 ---
 
-## 🖥️ Screen-by-Screen Architecture
+## 🔬 Methodology Highlights
 
-The frontend is built with high-density, accessible, responsive HTML5/Tailwind CSS with zero heavy runtime frameworks, ensuring sub-second rendering across all viewports:
+### 1. Recommendation-to-Sanction Delay
 
-| Screen | File | Primary Responsibility |
-|---|---|---|
-| **Executive Overview** | [`Overview_Dashboard.html`](Overview_Dashboard.html) / [`index.html`](index.html) | Macro KPI tiles (198K registered, 171K scanned, 23.3K flagged, ₹8.5K Cr corpus), severity distribution, and immediate priority queue. |
-| **Forensic Dossier** | [`Case_Details.html`](Case_Details.html) | Deep-dive audit investigation docket for a single work. Displays verified sanction amounts, derived recommended dates, $z$-score breakdowns, automated synthesis, and local auditor notes. |
-| **Triage Workbench** | [`Flagged_Cases.html`](Flagged_Cases.html) | Triage filtering by severity, category, agency, and state; direct launchpad into forensic dossiers. |
-| **Data Explorer** | [`Data_Explorer.html`](Data_Explorer.html) | Full 171,890 works workspace. Single-viewport design (1440×900, 1280×800, 1920×1080) with column sorting, search, and CSV export. |
-| **Deep Dive Analytics** | [`Analytics.html`](Analytics.html) | Sector expenditure dispersion, timeline velocity curves, and implementing agency concentration indices. |
-| **Geographic Map** | [`Geographic_Map.html`](Geographic_Map.html) | Geospatial constituency cluster map and district anomaly density visualization. |
+Measures the elapsed time between a work's recommendation and administrative sanction, then compares it with regional processing patterns. The documented checks include a robust z-score threshold of **3.5** and a **180-day** delay condition.
 
----
+### 2. Sanction Amount Outliers
 
-## 🤖 NIDHI Assistant (AI Audit Copilot)
+Compares a work's sanctioned amount with relevant peer works, using constituency/category cohorts. A robust z-score of **3.5 or greater** identifies an unusually high value for review.
 
-An embedded forensic audit assistant available on all screens via a floating, draggable launcher (`assets/js/nidhi-assistant.js`):
-- **Deterministic Rules & Fallback**: Grounded in platform dataset statistics without hallucinating non-existent works.
-- **Auditor Q&A**: Responds to questions regarding MPLADS guidelines, Rule 12 exemptions, CVC/CAG circulars, robust $z$-score thresholds, and specific work IDs.
-- **Draggable & Resizable**: Full drag-and-drop window positioning with touch and mouse support, persistent viewport state, and silent page navigation (no unsolicited popups).
+The robust z-score takes the form:
 
----
-
-## 🔌 API Reference
-
-The backend exposes a high-throughput REST API built on FastAPI:
-
-### 1. Health & Status
-```http
-GET /health
+```text
+robust_z = (value - cohort_median) / (1.4826 × cohort_MAD)
 ```
-**Response**:
+
+This score expresses deviation from a peer distribution; it does not establish that an allocation is improper.
+
+### 3. Spending-Pattern Drift
+
+Compares category allocations with an MP's historical spending baseline. If fewer than **five historical works** are available, the documented guardrail suppresses the drift calculation and reports insufficient baseline data.
+
+### 4. Multivariate Anomalies
+
+Isolation Forest evaluates combinations of attributes such as amounts, delays, and agency or regional characteristics. Its flags supplement the individual statistical rules and are separately identifiable.
+
+### 5. Data Quality
+
+Separate checks identify implausible amounts, stale reporting, and possible category mismatches. These indicate records requiring clarification or correction and must not be conflated with evidence of financial misconduct.
+
+---
+
+## 📊 Documented Dataset Snapshot
+
+| Measure | Snapshot value | Interpretation |
+| --- | ---: | --- |
+| Registered works | **198,116** | Total records in the documented consolidated dataset |
+| Analyzed works | **171,890** | Records processed by the analytical pipeline |
+| Rule-only flagged works | **23,329** | Works flagged before including Isolation Forest |
+| Flagged works including Isolation Forest | **23,907** | Combined analytical review queue |
+| High-severity works | **1,137** | Documented high-severity subset |
+| Analyzed allocation value | **₹8,501.1 Cr** | Total allocation value associated with analyzed works |
+
+**How to read these numbers:** Rule-only and model-inclusive counts use different definitions. Data-quality findings are separate and may overlap the analytical queue. Allocation values associated with flagged works are **review exposure, not estimated losses or recovered funds**.
+
+The supplied project documentation contains differing flagged-exposure totals for different views. They are intentionally omitted here until their definitions are reconciled. No precision, recall, or real-world fraud-detection rate is claimed from these counts.
+
+---
+
+## 🔌 Backend API
+
+The project documentation describes these routes:
+
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| `GET` | `/health` | Service health and platform metadata |
+| `GET` | `/api/anomalies/summary/breakdown` | Dataset, review-queue, severity, and data-quality counts |
+| `GET` | `/api/anomalies/summary/rupee-impact` | Allocation values associated with analyzed and flagged works |
+| `GET` | `/api/anomalies/dossier?work_id=...` | Work-level investigation dossier |
+| `GET` | `/api/anomalies/{work_id}` | Individual work lookup |
+| `POST` | `/api/assistant/chat` | Audit-assistant conversation |
+
+Example assistant request:
+
 ```json
 {
-  "status": "ok",
-  "platform": "NIDHI TRACE",
-  "version": "2.6.0"
+  "message": "Explain why this work is flagged",
+  "session_id": "demo-session"
 }
 ```
 
-### 2. Summary Breakdown
-```http
-GET /api/anomalies/summary/breakdown
-```
-**Response**:
-```json
-{
-  "total_works": 171890,
-  "flagged_count": 23907,
-  "high_severity_count": 1137,
-  "high_count": 6844,
-  "med_count": 15926,
-  "low_count": 147983,
-  "dq_flagged_count": 62089
-}
-```
-
-### 3. Rupee Exposure Breakdown
-```http
-GET /api/anomalies/summary/rupee-impact
-```
-**Response**:
-```json
-{
-  "total_analyzed_cr": 8501.1,
-  "flagged_review_cr": 1769.8,
-  "high_severity_cr": 262.3,
-  "data_quality_cr": 494.2
-}
-```
-
-### 4. Forensic Case Dossier
-```http
-GET /api/anomalies/dossier?work_id=WS%2FMP640%2F2026-2027%2F255858
-GET /api/anomalies/{work_id}
-```
-*Note: Supports URL-encoded slash characters and numerical work ID lookups.*
-
-**Response** (`DossierOut`):
-```json
-{
-  "work_id": "WS/MP640/2026-2027/255858-CC Road",
-  "work_description": "CC Road - From the road towards the Colony",
-  "sanction_amount": 2500000.0,
-  "sanction_date": "2024-03-12",
-  "recommended_date": "2023-08-15",
-  "gap_days": 210,
-  "gap_robust_z": 3.82,
-  "amount_robust_z": 3.65,
-  "mp_drift_robust_z": 0.45,
-  "mp_baseline_eligible": true,
-  "lok_sabha_term": "17th Lok Sabha",
-  "ida": "District Magistrate / Executive Engineer",
-  "is_high_severity": true,
-  "flag_delay": true,
-  "flag_amount": true,
-  "flag_mp_drift": false,
-  "flag_isolation_forest": false,
-  "dq_flag": false,
-  "explanation": "Recommendation-to-sanction timeline of 210 days deviates significantly from regional median (robust z = 3.82). Sanction amount of ₹25.00 L is an econometric outlier for this category."
-}
-```
-
-### 5. NIDHI Assistant Chat
-```http
-POST /api/assistant/chat
-Content-Type: application/json
-
-{
-  "message": "Explain why work ID 255858 is flagged",
-  "session_id": "sess_user_01"
-}
-```
+For identifiers containing slashes, use a URL-encoded `work_id` query parameter with the dossier endpoint. Dossier fields described in the documentation include sanction amount, dates, robust z-scores, individual flags, baseline eligibility, and an explanation.
 
 ---
 
-## 🛠️ Local Development & Setup
+## 🚀 Getting Started
 
-### Prerequisites
-- **Python 3.10+**
-- **Git**
-- Optional: Node.js (for Tailwind CLI, if modifying CSS)
+### Try the Integrated Application
 
-### 1. Clone the Repository
-```bash
-git clone https://github.com/Rithvik-krishna/MPLAD-INSIGHT.git
-cd MPLAD-INSIGHT
-```
+Open **[nidhi-trace.vercel.app](https://nidhi-trace.vercel.app/)** to explore the dashboard and investigation workflow.
 
-### 2. Set Up Virtual Environment
-```bash
-python -m venv venv
-
-# Windows (PowerShell)
-.\venv\Scripts\Activate.ps1
-
-# Linux / macOS
-source venv/bin/activate
-```
-
-### 3. Install Dependencies
-```bash
-# Backend dependencies
-pip install -r backend/requirements.txt
-```
-
-### 4. Run the Integrated Local Server
-The root [`server.py`](server.py) runs an integrated HTTP server that serves all static frontend assets and seamlessly bridges FastAPI endpoints and the AI Copilot on port **3000**:
+### Get the Backend Repository
 
 ```bash
-python server.py
+git clone https://github.com/nikhil-0420/NidhiTrace.git
+cd NidhiTrace
 ```
 
-Open your browser to:
-- **Dashboard**: [http://localhost:3000/](http://localhost:3000/)
-- **Case Dossier**: [http://localhost:3000/Case_Details.html?id=MPLAD-03983](http://localhost:3000/Case_Details.html?id=MPLAD-03983)
-- **Data Explorer**: [http://localhost:3000/Data_Explorer.html](http://localhost:3000/Data_Explorer.html)
-- **Health Check**: [http://localhost:3000/health](http://localhost:3000/health)
+The backend uses Python and FastAPI. Dependency paths, environment configuration, dataset preparation, and the application entry point must follow this repository's checked-in source. The teammate's frontend setup commands are not assumed to apply to this backend repository.
 
 ---
 
-## 🚢 Deployment Architecture
+## 🎯 Key Design Decisions
 
-```mermaid
-graph LR
-    User([Browser / Auditor]) --> VercelEdge[Vercel Edge CDN<br/>Static Pages + Python Serverless api/]
-    VercelEdge --> RenderApp[Render Cloud<br/>FastAPI Docker Service<br/>nidhitrace-api.onrender.com]
-    RenderApp --> SQLite[(MPLADS SQLite / Parquet Dataset<br/>198,116 Works Seed)]
-```
-
-- **Frontend Hosting**: Deployed on **Vercel** ([https://nidhi-trace.vercel.app/](https://nidhi-trace.vercel.app/)) using clean URL rewrites, edge caching headers, and lightweight serverless fallbacks in `api/`.
-- **Backend Service**: Deployed on **Render** (`https://nidhitrace-api.onrender.com/`) running FastAPI with Uvicorn workers and full-text index querying.
+- **Keep signals inspectable:** reviewers should see why a work was flagged rather than receive an unexplained blended score.
+- **Compare relevant peers:** statistical context matters when interpreting allocation amounts and delays.
+- **Treat sparse histories explicitly:** insufficient evidence should remain visible rather than become a misleading score.
+- **Separate reporting problems from analytical outliers:** data quality and suspicious patterns require different follow-up.
+- **Preserve human judgment:** anomaly detection prioritizes review; it does not establish wrongdoing.
 
 ---
 
-## 🛡️ Governance, Privacy & Human-in-the-Loop Mandate
+## 🔮 Known Limitations
 
-NIDHI TRACE adheres strictly to government AI ethics principles:
-
-1. **Human-in-the-Loop**: All algorithmic signals represent statistical leads for human review. The system provides an **Auditor Review & Case Notes** workspace to record official justifications rather than autonomously modifying project dockets.
-2. **No Blended Hallucinations**: Every flagged item traces to a specific mathematical violation ($z \ge 3.5$, MAD anomaly, or explicit schema discrepancy) rather than an arbitrary opacity score.
-3. **No Synthetic Government Action**: The platform does not claim unverified live integrations with CVC, PFMS, or district treasuries; it is an open audit and analytical workbench.
+- Statistical outliers can reflect legitimate differences in project size, geography, administrative processes, or local needs.
+- Results depend on source completeness, category consistency, cohort selection, and historical coverage.
+- Dataset counts are snapshot figures and may change after ingestion or methodology updates.
+- Isolation Forest flags are unsupervised signals; independently labeled accuracy results are not provided in the supplied documentation.
+- Assistant responses require verification against source records and applicable official guidance.
+- The project does not claim verified live integrations with government enforcement or treasury systems.
 
 ---
 
 ## 👥 Contributors & Acknowledgements
 
-Developed for institutional transparency and public fund governance. Built with data published under the Open Government Data (OGD) Platform India and MoSPI MPLADS portals.
+**Nikhil — Backend Development**  
+[GitHub](https://github.com/nikhil-0420) · [Backend Repository](https://github.com/nikhil-0420/NidhiTrace)
+
+**Frontend — Teammate Contribution**  
+[Frontend Repository](https://github.com/Rithvik-krishna/MPLAD-INSIGHT)
+
+The project documentation attributes its source data to the **Open Government Data Platform India** and **MoSPI MPLADS portals**. This is an independent project, not an official government service or endorsement.
+
+---
+
+**⭐ If you find this project useful, consider starring the repository.**
